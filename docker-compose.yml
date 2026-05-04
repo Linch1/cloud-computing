@@ -35,6 +35,8 @@ services:
       - ./contracts:/app
     depends_on:
       - hardhat
+    environment:
+      RPC_URL: http://hardhat:8545
     command: >
       sh -c "until [ -d node_modules/hardhat ]; do echo 'waiting for hardhat npm ci...'; sleep 3; done &&
              until nc -z hardhat 8545 2>/dev/null; do echo 'waiting for RPC :8545...'; sleep 1; done &&
