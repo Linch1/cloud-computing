@@ -1,0 +1,10 @@
+{
+  "network": "hardhat",
+  "chainId": 31337,
+  "contract": "VotingRegistry",
+  "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  "initialOwner": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "txHash": "0xcef9af0056f48b0ef8279dc0b7ba254729bc84fbbe97ab873d63c03c85fe40db",
+  "deployedAt": "2026-04-28T22:39:00.425Z"
+}

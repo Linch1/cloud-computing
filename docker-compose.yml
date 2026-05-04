@@ -1,0 +1,60 @@
+# Docker Compose per la Lightsail VM.
+#
+# Avvia tre servizi:
+#   1. hardhat  -> Hardhat node EVM su :8545 (chainId 31337)
+#   2. deploy   -> deploya VotingRegistry una sola volta dopo lo start
+#   3. redis    -> Redis 7 con requirepass + appendonly
+#
+# Pre-requisiti sulla VM:
+#   - Docker + Docker Compose plugin installati
+#   - File `.env` accanto a questo compose con: REDIS_PASSWORD=<32 char random>
+#
+# Comandi tipici:
+#   docker compose up -d
+#   docker compose logs -f hardhat
+#   docker compose down            # NON wipe-out: redis ha volume persistente
+#   docker compose down -v         # wipe-out anche del volume redis
+
+services:
+  hardhat:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - ./contracts:/app
+    command: >
+      sh -c "npm ci &&
+             npx hardhat node --hostname 0.0.0.0 --port 8545"
+    ports:
+      - "8545:8545"
+    restart: unless-stopped
+
+  deploy:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - ./contracts:/app
+    depends_on:
+      - hardhat
+    command: >
+      sh -c "until [ -d node_modules/hardhat ]; do echo 'waiting for hardhat npm ci...'; sleep 3; done &&
+             until nc -z hardhat 8545 2>/dev/null; do echo 'waiting for RPC :8545...'; sleep 1; done &&
+             sleep 3 &&
+             npx hardhat run scripts/deploy.js --network localhost"
+    restart: "no"
+
+  redis:
+    image: redis:7-alpine
+    command:
+      - redis-server
+      - --requirepass
+      - ${REDIS_PASSWORD}
+      - --appendonly
+      - "yes"
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+
+volumes:
+  redis-data:

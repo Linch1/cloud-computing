@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Build / cache
+.next/
+out/
+artifacts/
+cache/
+coverage/
+coverage.json
+
+# Local secrets / state
+.env
+.env.local
+.env.*.local
+
+# Hardhat local deployment manifest (regenerated at every node start)
+contracts/deployments/localhost/
+
+# Logs
+*.log
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/

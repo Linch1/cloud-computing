@@ -1,0 +1,12 @@
+node_modules
+.env
+.env.local
+coverage
+coverage.json
+
+artifacts
+cache
+
+deployments/localhost
+*.log
+.DS_Store

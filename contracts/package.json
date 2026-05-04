@@ -1,0 +1,24 @@
+{
+  "name": "voting-registry-contracts",
+  "version": "0.1.0",
+  "description": "Smart contracts (Solidity + Hardhat) for the secure online voting platform.",
+  "private": true,
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "test:gas": "cross-env REPORT_GAS=true hardhat test",
+    "node": "hardhat node",
+    "deploy:local": "hardhat run scripts/deploy.js --network localhost",
+    "deploy:hardhat": "hardhat run scripts/deploy.js --network hardhat",
+    "clean": "hardhat clean"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@openzeppelin/contracts": "^5.0.2",
+    "chai": "^4.4.1",
+    "cross-env": "^7.0.3",
+    "ethers": "^6.13.0",
+    "hardhat": "^2.22.5",
+    "hardhat-gas-reporter": "^1.0.10"
+  }
+}

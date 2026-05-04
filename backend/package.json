@@ -1,0 +1,36 @@
+{
+  "name": "voting-platform-backend",
+  "version": "0.1.0",
+  "description": "Fastify + Redis backend for the secure online voting platform.",
+  "private": true,
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@fastify/cors": "^9.0.1",
+    "@fastify/helmet": "^11.1.1",
+    "@fastify/jwt": "^8.0.1",
+    "@fastify/rate-limit": "^9.1.0",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "ethers": "^6.13.0",
+    "fastify": "^4.28.1",
+    "fastify-plugin": "^4.5.1",
+    "ioredis": "^5.4.1",
+    "pino": "^9.3.2",
+    "ulid": "^2.3.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "ioredis-mock": "^8.9.0",
+    "vitest": "^1.6.0"
+  }
+}
