@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
@@ -15,7 +16,7 @@ import { Card, CardBody, CardHeader } from "@/components/ui/Card.jsx";
 import { Input } from "@/components/ui/Input.jsx";
 import { Button } from "@/components/ui/Button.jsx";
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const search = useSearchParams();
   const { user, loading } = useAuth();
@@ -42,43 +43,51 @@ export default function LoginPage() {
   };
 
   return (
+    <Card>
+      <CardHeader>
+        <h1 className="text-xl font-semibold text-slate-900">Sign in</h1>
+        <p className="text-sm text-slate-500">Use your email and password.</p>
+      </CardHeader>
+      <CardBody>
+        <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>
+          <Input
+            label="Email"
+            type="email"
+            autoComplete="email"
+            placeholder="you@example.com"
+            error={errors.email?.message}
+            {...register("email")}
+          />
+          <Input
+            label="Password"
+            type="password"
+            autoComplete="current-password"
+            placeholder="••••••••"
+            error={errors.password?.message}
+            {...register("password")}
+          />
+          <Button type="submit" loading={isSubmitting} className="w-full">
+            Sign in
+          </Button>
+        </form>
+        <p className="mt-4 text-center text-sm text-slate-600">
+          No account?{" "}
+          <Link href="/register" className="font-medium text-brand-700 hover:text-brand-800">
+            Register
+          </Link>
+        </p>
+      </CardBody>
+    </Card>
+  );
+}
+
+export default function LoginPage() {
+  return (
     <Container>
       <div className="mx-auto max-w-md">
-        <Card>
-          <CardHeader>
-            <h1 className="text-xl font-semibold text-slate-900">Sign in</h1>
-            <p className="text-sm text-slate-500">Use your email and password.</p>
-          </CardHeader>
-          <CardBody>
-            <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>
-              <Input
-                label="Email"
-                type="email"
-                autoComplete="email"
-                placeholder="you@example.com"
-                error={errors.email?.message}
-                {...register("email")}
-              />
-              <Input
-                label="Password"
-                type="password"
-                autoComplete="current-password"
-                placeholder="••••••••"
-                error={errors.password?.message}
-                {...register("password")}
-              />
-              <Button type="submit" loading={isSubmitting} className="w-full">
-                Sign in
-              </Button>
-            </form>
-            <p className="mt-4 text-center text-sm text-slate-600">
-              No account?{" "}
-              <Link href="/register" className="font-medium text-brand-700 hover:text-brand-800">
-                Register
-              </Link>
-            </p>
-          </CardBody>
-        </Card>
+        <Suspense fallback={<div className="h-32" />}>
+          <LoginForm />
+        </Suspense>
       </div>
     </Container>
   );
