@@ -56,22 +56,17 @@ export async function buildApp(opts = {}) {
     trustProxy: true,
   });
 
+  
+
   app.decorate("config", config);
 
   await app.register(errorHandlerPlugin);
   await app.register(helmet, { contentSecurityPolicy: false });
-  await app.register(cors, {
-    origin: (origin, cb) => {
-      if (!origin) return cb(null, true);
-      const allowed = [
-        //"http://localhost:3000",
-        "https://main.d1pp5zna64mxfu.amplifyapp.com/",
-      ]
-      if (allowed.includes("*") || allowed.includes(origin)) return cb(null, true);
-      return cb(new Error("CORS: origin not allowed"), false);
-    },
-    credentials: true,
-  });
+  await app.register(cors, {origin: "*"});
+  
+  app.addHook('onRequest', async (req, reply) => {
+    console.log(req.method, req.url)
+  })
 
   await app.register(redisPlugin, { client: opts.redisClient });
 
@@ -108,6 +103,13 @@ export async function buildApp(opts = {}) {
   });
 
   app.get("/health", async () => ({ status: "ok", uptime: process.uptime() }));
+
+  app.get("/build", async () => ({
+    status: "ok",
+    gitSha: process.env.GIT_SHA ?? "unknown",
+    buildTime: process.env.BUILD_TIME ?? "unknown",
+    node: process.version,
+  }));
 
   await app.register(authRoutes);
   await app.register(adminRoutes);

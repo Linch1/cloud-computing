@@ -271,7 +271,12 @@ aws ecr get-login-password --region $REGION |
   docker login --username AWS --password-stdin "$ACCOUNT.dkr.ecr.$REGION.amazonaws.com"
 
 # 2. build (linux/amd64 per Fargate, anche se sei su un Mac M1/M2/M3)
-docker build --platform=linux/amd64 -t voting-backend:latest backend\
+$GIT_SHA    = (git rev-parse --short HEAD)
+$BUILD_TIME = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+docker build --platform=linux/amd64 `
+  --build-arg GIT_SHA=$GIT_SHA `
+  --build-arg BUILD_TIME=$BUILD_TIME `
+  -t voting-backend:latest backend\
 
 # 3. tag + push
 docker tag voting-backend:latest "${REPO}:latest"
@@ -347,7 +352,14 @@ il **Service endpoint** (qualcosa tipo
 ```powershell
 curl <BACKEND_URL>/elections
 # atteso: {"elections":[]}, status 200
+
+curl <BACKEND_URL>/build
+# atteso: {"status":"ok","gitSha":"a1b2c3d","buildTime":"2026-05-05T19:12:34Z","node":"v20.x.x"}
 ```
+
+Il campo `gitSha` / `buildTime` devono combaciare con l'ultimo
+`docker build` (+ push) fatto dal tuo laptop. Se non combaciano dopo un
+`force-new-deployment`, ECS sta ancora servendo un task vecchio.
 
 Se restituisce 502 o connection reset, controlla nei log CloudWatch
 della task se il backend è fallito a parsare le env-var (`zod` urla
@@ -356,7 +368,12 @@ forte se manca qualcosa o se un valore non è valido).
 ### 7. Redeploy quando cambi codice
 
 ```powershell
-docker build --platform=linux/amd64 -t voting-backend:latest backend\
+$GIT_SHA    = (git rev-parse --short HEAD)
+$BUILD_TIME = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+docker build --platform=linux/amd64 `
+  --build-arg GIT_SHA=$GIT_SHA `
+  --build-arg BUILD_TIME=$BUILD_TIME `
+  -t voting-backend:latest backend\
 docker tag voting-backend:latest "${REPO}:latest"
 docker push "${REPO}:latest"
 

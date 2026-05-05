@@ -3,6 +3,12 @@
 
 FROM node:20-alpine
 
+# Populated at `docker build` time — compare with CloudWatch on every deploy.
+ARG GIT_SHA=unknown
+ARG BUILD_TIME=unknown
+ENV GIT_SHA=$GIT_SHA \
+    BUILD_TIME=$BUILD_TIME
+
 WORKDIR /app
 
 # Solo dipendenze di runtime (niente devDependencies)

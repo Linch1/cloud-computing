@@ -3,6 +3,15 @@ import { buildApp } from "./app.js";
 async function start() {
   const app = await buildApp();
 
+  app.log.info(
+    {
+      gitSha: process.env.GIT_SHA ?? "unknown",
+      buildTime: process.env.BUILD_TIME ?? "unknown",
+      node: process.version,
+    },
+    "Backend build identity — if this does not change after deploy, the new image is not running",
+  );
+
   try {
     await app.services.authService.ensureAdmin({
       email: app.config.ADMIN_EMAIL,
