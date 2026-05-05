@@ -63,7 +63,10 @@ export async function buildApp(opts = {}) {
   await app.register(cors, {
     origin: (origin, cb) => {
       if (!origin) return cb(null, true);
-      const allowed = config.corsOrigins;
+      const allowed = [
+        //"http://localhost:3000",
+        "https://main.d1pp5zna64mxfu.amplifyapp.com/",
+      ]
       if (allowed.includes("*") || allowed.includes(origin)) return cb(null, true);
       return cb(new Error("CORS: origin not allowed"), false);
     },
