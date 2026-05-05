@@ -1,0 +1,16 @@
+node_modules
+npm-debug.log
+.env
+.env.local
+.env.*.local
+.git
+.gitignore
+.dockerignore
+Dockerfile
+apprunner.yaml
+coverage
+*.log
+.DS_Store
+test
+*.test.js
+*.spec.js

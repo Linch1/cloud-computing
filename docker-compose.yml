@@ -3,7 +3,7 @@
 # Avvia tre servizi:
 #   1. hardhat  -> Hardhat node EVM su :8545 (chainId 31337)
 #   2. deploy   -> deploya VotingRegistry una sola volta dopo lo start
-#   3. redis    -> Redis 7 con requirepass + appendonly
+#   3. redis    -> Redis 7 con requirepass + appendonly (esposto pubblicamente)
 #
 # Pre-requisiti sulla VM:
 #   - Docker + Docker Compose plugin installati
